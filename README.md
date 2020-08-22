@@ -73,3 +73,4 @@ You need a few things to get the project running on your machine:-
 #### [Sharon Kerubo](https://github.com/Sharon-Kerubo)
 
 #### [Wendy Munyasi](https://github.com/wendymunyasi)
+#### [Fawcett Simiyu](https://github.com/blackbad1)
