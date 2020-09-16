@@ -38,6 +38,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
     'smartfarm.apps.SmartfarmConfig',
+    'blog.apps.BlogConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_api_key',
     'knox',
 ]
 
@@ -127,6 +129,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
 
 
 # Static files (CSS, JavaScript, Images)
