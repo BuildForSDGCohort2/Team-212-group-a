@@ -55,5 +55,19 @@ $(document).ready(function(){
          $("#copy7").text("copied")
          reset("#copy7")
      })
+     $('#copy8').click(function(){
+        let data = $("#dcopy8").html()
+         $("#dcopy8").select();
+         document.execCommand("copy")
+         $("#copy8").text("copied")
+         reset("#copy8")
+     })
+     $('#copy9').click(function(){
+        let data = $("#dcopy9").html()
+         $("#dcopy9").select();
+         document.execCommand("copy")
+         $("#copy9").text("copied")
+         reset("#copy9")
+     })
 }) 
 
