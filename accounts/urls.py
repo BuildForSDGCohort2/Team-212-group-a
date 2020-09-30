@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .authApi import RegistrationAPI, UserAPI, LoginAPI, ProfileAPI
+from .authApi import RegistrationAPI, UserAPI, LoginAPI, ProfileAPI, updateProfile
 from knox import views as knox_views
 
 urlpatterns=[
@@ -10,4 +10,5 @@ urlpatterns=[
     path('api/auth/profile', ProfileAPI.as_view(), name='profile'),
     path('api/auth/logout', knox_views.LogoutView.as_view(), name='logout'),
     path('api/auth/logout', knox_views.LogoutAllView.as_view(), name='logoutall'),
+    path('api/auth/profile/update', updateProfile,name="profileUpdate"),
 ]
