@@ -34,3 +34,27 @@ class ArticleAPI(generics.GenericAPIView):
             "article":ArticleSerializer(article,context=self.get_serializer_context()).data,  
         })
 
+# Update Article
+@api_view(['GET','PUT','DELETE'])
+def updateArticle(request,id):
+    try:
+        article = Article.objects.get(pk=id)
+
+    except Article.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = ArticleSerializer
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer=ArticleSerializer(Article, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, satus = HTTP_404_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
