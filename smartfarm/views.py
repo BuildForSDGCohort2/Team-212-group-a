@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+# index view
+def index(request):
+    '''
+    This view will be responsible for dislaying the home page once the url is called
+    '''
+    return render(request,'smartfarm/index.html')

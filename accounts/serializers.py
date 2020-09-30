@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from .models import Profile
 
 
 # UserSerializer
@@ -47,3 +48,17 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect login credentials")
+        
+#ProfileSerializer
+class ProfileSerializer(serializers.ModelSerializer):
+    '''
+    A class that will be used to serialize and deserialize all the new profiles objects.
+    '''
+    user = serializers.PrimaryKeyRelatedField(many=True,queryset = User.objects.all())
+    class Meta:
+        model=Profile
+        fields=('user','avatar','bio',)
+
+   
+
+

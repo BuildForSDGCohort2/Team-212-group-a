@@ -1,9 +1,10 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
-from .serializers import UserSerializer, RegistrationSerializer, LoginSerializer
+from .serializers import UserSerializer, RegistrationSerializer, LoginSerializer, ProfileSerializer
 from knox.views import LoginView
 from rest_framework.authentication import BasicAuthentication
+from rest_framework.decorators import action, api_view
 
 # RegistrationAPI
 class RegistrationAPI(generics.GenericAPIView):
@@ -53,4 +54,41 @@ class UserAPI(generics.GenericAPIView):
     serializer_class=UserSerializer
     def get_object(self):
         return self.request.user
+
+
+# ProfileAPI
+class ProfileAPI(generics.GenericAPIView):
+    '''
+    This class will return user details when the user endpoint is called
+    '''
+    permission_classes=[
+        permissions.IsAuthenticated,
+    ]
+    serializer_class=ProfileSerializer
+    def get_object(self):
+        return self.request.profile
+
+# Update Profile
+@api_view(['GET','PUT','DELETE'])
+def updateProfile(request,username):
+    try:
+        profile = Profile.objects.get(user__username=username)
+
+    except Profile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = ProfileSerializer
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer=ProfileSerializer(profile, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, satus = HTTP_404_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        profile.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
