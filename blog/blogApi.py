@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from .serializers import CropSerializer, ArticleSerializer
+from rest_framework.decorators import action, api_view
 
 # CropAPI
 class CropAPI(generics.GenericAPIView):
