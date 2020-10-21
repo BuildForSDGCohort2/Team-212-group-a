@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
-from .serializers import CropSerializer, ArticleSerializer
+from .serializers import CropSerializer, ArticleSerializer, StageSerializer
 from rest_framework.decorators import action, api_view
+from .models import Article, Stage, Crop
 
 # CropAPI
 class CropAPI(generics.GenericAPIView):
@@ -44,7 +45,7 @@ def updateArticle(request,id):
     except Article.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
-        serializer = ArticleSerializer
+        serializer = ArticleSerializer(article)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -58,4 +59,38 @@ def updateArticle(request,id):
     elif request.method == 'DELETE':
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+# Stage Article
+class CategoryArticles(viewsets.ModelViewSet):
+    '''
+    An endpoint to get the last articles under the same category
+    '''
+    lookup_field='stage'
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    def get_queryset(self):
+        stage = self.kwargs.get('stage')
+        queryset = Article.objects.filter(stage__name__icontains=stage).all()
+        print(queryset)
+        # for queryset in queryset:
+
+     
+        return queryset
+    
+# Stage Api
+class StageApi(generics.GenericAPIView):
+    '''
+    This class will create a new stage object once the crop api endpoint is called.
+    '''
+    serializer_class=StageSerializer
+
+    def post(self,request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        stage = serializer.save()
+        return Response({
+            "stage":StageSerializer(Stage,context=self.get_serializer_context()).data,
+           
+        })
 
