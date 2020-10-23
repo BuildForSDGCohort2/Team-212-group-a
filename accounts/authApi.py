@@ -44,7 +44,7 @@ class LoginAPI(generics.GenericAPIView):
 
 
 # UserAPI
-class UserAPI(generics.GenericAPIView):
+class UserAPI(generics.RetrieveAPIView):
     '''
     This class will return user details when the user endpoint is called
     '''
