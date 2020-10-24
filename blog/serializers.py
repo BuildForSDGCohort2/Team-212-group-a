@@ -31,11 +31,11 @@ class ArticleSerializer(serializers.ModelSerializer):
     '''
     A class that will be used to serialize and deserialize all the new articles objects.
     '''
-    crop = CropSerializer(read_only=True, required=False
-   )
-    stage = StageSerializer(read_only=True, required=False
-         )
-    farmer = UserSerializer(read_only=True, required=False)
+#     crop = CropSerializer(read_only=True, required=False
+#    )
+#     stage = StageSerializer(read_only=True, required=False
+#          )
+#     farmer = UserSerializer(read_only=True, required=False)
 
     class Meta:
         model = Article
