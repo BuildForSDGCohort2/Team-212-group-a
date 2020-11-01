@@ -18,7 +18,7 @@ class Categories(models.TextChoices):
     AVOCANDO = "avocando"
     COTTON = "cotton"
     CABBAGE = "cabbage"
-    SUGAR_CANE = "sugerCane"
+    SUGARCANE = "sugerCane"
     OKRA = "okra"
     CARROT = "carrot"
     CUCUMBER = "cucumber"

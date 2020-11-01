@@ -33,7 +33,9 @@ class ArticleAPI(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
         article = serializer.validated_data
+
 
         return Response({
             "article": ArticleSerializer(article, context=self.get_serializer_context()).data,
