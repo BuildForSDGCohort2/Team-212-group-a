@@ -35,9 +35,9 @@ class Stage(models.TextChoices):
     This class will instantiate all the Stage objects and their methods
     '''
     GENERAL = "general"
-    LANDPREP = "land preparation"
-    SEEDSELECTION = "seed selection"
-    CROPCARE = "crop care"
+    LANDPREP = "landprep"
+    SEEDSELECTION = "seedselection"
+    CROPCARE = "cropcare"
     HARVESTING = "harvesting"
     STORAGE = "storage"
     MARKETING = "marketing"
