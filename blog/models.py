@@ -54,10 +54,12 @@ class Article(models.Model):
     farmer = models.ForeignKey(User, on_delete=models.CASCADE)
     stage = models.CharField(
         max_length=100, choices=Stage.choices, default=Stage.GENERAL)
+    excerpt = models.CharField(max_length=255, default="This is a simple excerpt of the blog.")
     content = models.TextField(blank=True, null=True)
     cropimage = models.ImageField(
         upload_to='cropimages/', blank=True, null=True)
     featured = models.BooleanField(default=False)
+    
     created_at = models.DateTimeField(auto_now=True, blank=True)
     update_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
