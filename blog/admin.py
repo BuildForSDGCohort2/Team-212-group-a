@@ -1,6 +1,15 @@
 from django.contrib import admin
-from .models import Crop, Article, Stage
+from django_summernote.admin import SummernoteModelAdmin
+from .models import Article
 
-admin.site.register(Crop)
-admin.site.register(Article)
-admin.site.register(Stage)
+
+class ArticleAdmin(SummernoteModelAdmin):
+    exclude = ('slug',)
+    list_display = ('id', 'title', 'crop', 'stage', 'created_at')
+    list_display_links = ('id', 'title')
+    seach_fields = "title"
+    list_per_page = 10
+    summernote_fields = ("content")
+
+
+admin.site.register(Article, ArticleAdmin)
