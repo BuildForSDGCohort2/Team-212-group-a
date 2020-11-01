@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'knox',
     'corsheaders',
+    'django_summernote',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,9 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFileStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SUMMERNOTE_THEME = 'bs4'
 
 django_heroku.settings(locals())
 
