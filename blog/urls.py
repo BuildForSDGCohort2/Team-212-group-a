@@ -1,13 +1,15 @@
 from django.urls import path
-from .blogApi import CropAPI, ArticleAPI, updateArticle ,CategoryArticles, StageApi
+from .blogApi import ArticleAPI, updateArticle , CropArticlesView, StageArticlesView, ArticleFeaturedView, ArticlesListView, ArticleDetailView
 
 urlpatterns=[
-    path('api/blog/crop', CropAPI.as_view(),name='crops'),
-    path('api/blog/stage', StageApi.as_view(),name='stage'),
     path('api/blog/article', ArticleAPI.as_view(),name='articles'),
+    path('api/blog/articles',ArticlesListView.as_view(),name="articles"),
+    path('api/blog/article/featured',ArticleFeaturedView.as_view(),name="featured"),
+    path('api/blog/articles/crop',CropArticlesView.as_view()),
+    path('api/blog/articles/stage',StageArticlesView.as_view()),
     path('api/blog/article/update/<int:id>/',updateArticle, name="articleUpdate"),
-    path('api/blog/articles/<str:stage>/',CategoryArticles.as_view({
-    'get': 'list',
-}),name='bycategories'),
+    path('api/blog/article/detail/<slug>',ArticleDetailView.as_view()),
+    
+
     
 ]
