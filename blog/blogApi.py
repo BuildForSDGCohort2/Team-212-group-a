@@ -1,24 +1,26 @@
 from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
-from .serializers import CropSerializer, ArticleSerializer, StageSerializer
+from .serializers import ArticleSerializer
 from rest_framework.decorators import action, api_view
-from .models import Article, Stage, Crop
+from rest_framework.views import APIView
+from .models import Article
 
-# CropAPI
-class CropAPI(generics.GenericAPIView):
-    '''
-    This class will create a new crop object once the crop api endpoint is called.
-    '''
-    serializer_class=CropSerializer
 
-    def post(self,request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        crop = serializer.save()
-        return Response({
-            "crop":CropSerializer(Crop,context=self.get_serializer_context()).data,
-           
-        })
+class ArticlesListView(generics.ListAPIView):
+    """
+
+    List all articles
+
+    Args:
+        generics ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    queryset = Article.objects.order_by("-created_at")
+    serializer_class = ArticleSerializer
+    lookup_field = 'slug'
+    permission_classes = (permissions.AllowAny,)
 
 
 # ArticleAPI
@@ -26,19 +28,60 @@ class ArticleAPI(generics.GenericAPIView):
     '''
     This class will create a new article object once the article api endpoint is called.
     '''
-    serializer_class=ArticleSerializer
-    def post(self,request,*args, **kwargs):
+    serializer_class = ArticleSerializer
+
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         article = serializer.validated_data
 
         return Response({
-            "article":ArticleSerializer(article,context=self.get_serializer_context()).data,  
+            "article": ArticleSerializer(article, context=self.get_serializer_context()).data,
         })
 
+# Featured Article
+
+
+class ArticleFeaturedView(generics.ListAPIView):
+    queryset = Article.objects.all().filter(featured=True)
+    serializer_class = ArticleSerializer
+    lookup_field = 'slug'
+    permission_classes = (permissions.AllowAny,)
+
+# Stage Articles
+
+
+class StageArticlesView(APIView):
+    serializer_class = ArticleSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        data = self.request.data
+        stage = data['stage']
+        queryset = Article.objects.order_by(
+            'created_at').filter(stage__iexact=stage)
+        serializer = ArticleSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+# Crop Articles
+
+
+class CropArticlesView(APIView):
+    serializer_class = ArticleSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        data = self.request.data
+        crop = data['crop']
+        queryset = Article.objects.order_by(
+            'created_at').filter(crop__iexact=crop)
+        serializer = ArticleSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 # Update Article
-@api_view(['GET','PUT','DELETE'])
-def updateArticle(request,id):
+@api_view(['GET', 'PUT', 'DELETE'])
+def updateArticle(request, id):
     try:
         article = Article.objects.get(pk=id)
 
@@ -49,48 +92,20 @@ def updateArticle(request,id):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer=ArticleSerializer(Article, data = request.data)
+        serializer = ArticleSerializer(Article, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
 
-        return Response(serializer.errors, satus = HTTP_404_BAD_REQUEST)
+        return Response(serializer.errors, satus=HTTP_404_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    
-# Stage Article
-class CategoryArticles(viewsets.ModelViewSet):
-    '''
-    An endpoint to get the last articles under the same category
-    '''
-    lookup_field='stage'
-    queryset = Article.objects.all()
+
+
+class ArticleDetailView(generics.RetrieveAPIView):
+    queryset = Article.objects.order_by('-created_at')
     serializer_class = ArticleSerializer
-    def get_queryset(self):
-        stage = self.kwargs.get('stage')
-        queryset = Article.objects.filter(stage__name__icontains=stage).all()
-        print(queryset)
-        # for queryset in queryset:
-
-     
-        return queryset
-    
-# Stage Api
-class StageApi(generics.GenericAPIView):
-    '''
-    This class will create a new stage object once the crop api endpoint is called.
-    '''
-    serializer_class=StageSerializer
-
-    def post(self,request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        stage = serializer.save()
-        return Response({
-            "stage":StageSerializer(Stage,context=self.get_serializer_context()).data,
-           
-        })
-
+    lookup_field = 'slug'
+    permission_classes = (permissions.AllowAny,)
